@@ -78,20 +78,4 @@ public class EmployeeController123 {
         employeeRepository.deleteById(eid);
         return ResponseEntity.ok("Employee with ID " + eid + " has been deleted successfully.");
     }
-
-    // UPDATE Employee Details
-    @PutMapping("/update/{eid}")
-    public ResponseEntity<Employee> updateEmployee1(@PathVariable long eid, @RequestBody Employee empReq) throws ResourceNotFoundException {
-        Employee employee = employeeRepository.findById(eid)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this ID: " + eid));
-
-        employee.setFname(empReq.getFname());
-        employee.setLname(empReq.getLname());
-        employee.setPhone(empReq.getPhone());
-        employee.setAge(empReq.getAge());
-        employee.setSalary(empReq.getSalary());
-
-        Employee updatedEmp = employeeRepository.save(employee);
-        return ResponseEntity.ok(updatedEmp);
-    }
 }
