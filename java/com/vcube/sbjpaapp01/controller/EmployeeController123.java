@@ -1,10 +1,11 @@
-package com.vcube.sbjpaapp01.controller;
+  package com.vcube.sbjpaapp01.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,4 +70,28 @@ public class EmployeeController123 {
 	public Employee createEmployee(@RequestBody Employee employee) {
 		return employeeRepository.save(employee);
 	}
+	@DeleteMapping("/delete/{eid}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable long eid) throws ResourceNotFoundException {
+        Employee employee = employeeRepository.findById(eid)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this ID: " + eid));
+
+        employeeRepository.deleteById(eid);
+        return ResponseEntity.ok("Employee with ID " + eid + " has been deleted successfully.");
+    }
+
+    // UPDATE Employee Details
+    @PutMapping("/update/{eid}")
+    public ResponseEntity<Employee> updateEmployee1(@PathVariable long eid, @RequestBody Employee empReq) throws ResourceNotFoundException {
+        Employee employee = employeeRepository.findById(eid)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this ID: " + eid));
+
+        employee.setFname(empReq.getFname());
+        employee.setLname(empReq.getLname());
+        employee.setPhone(empReq.getPhone());
+        employee.setAge(empReq.getAge());
+        employee.setSalary(empReq.getSalary());
+
+        Employee updatedEmp = employeeRepository.save(employee);
+        return ResponseEntity.ok(updatedEmp);
+    }
 }
